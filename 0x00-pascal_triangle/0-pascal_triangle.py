@@ -2,7 +2,6 @@
 """A module for Pascal's Triangle."""
 
 
-
 def pascal_triangle(n):
     """ Function to print pascal triangle """
     if n <= 0:
