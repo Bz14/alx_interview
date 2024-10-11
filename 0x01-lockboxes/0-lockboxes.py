@@ -10,7 +10,7 @@ def canUnlockAll(boxes):
     while queue:
         node = queue.popleft()
         for child in boxes[node]:
-            if child not in visited and  0 <= child < len(boxes):
+            if child not in visited and 0 <= child < len(boxes):
                 visited.add(child)
                 queue.append(child)
     return len(visited) == len(boxes)
