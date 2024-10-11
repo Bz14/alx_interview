@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" A module to implement lockboxes """ 
+""" A module to implement lockboxes """
 from collections import deque
 
 
