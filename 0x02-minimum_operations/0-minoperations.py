@@ -2,7 +2,7 @@
 """ Minimum operations """
 
 
-def minOperations(n):
+def minOperations(n: int) -> int:
     """ Minimum operation """
     op = 0
     st = "H"
