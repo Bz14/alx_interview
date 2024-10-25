@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Log parsing """
 import sys
+import re
 
 
 def print_stats(file_size, status_codes):
@@ -24,6 +25,8 @@ def parse_line(line, file_size, status_codes):
 
 
 if __name__ == "__main__":
+    regex = re.compile(
+    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - \[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d+\] "GET /projects/260 HTTP/1.1" (.{3}) (\d+)')
     file_size = 0
     status_codes = {
         "200": 0,
@@ -39,12 +42,17 @@ if __name__ == "__main__":
 
     try:
         for line in sys.stdin:
-            count += 1
-            file_size, status_codes = parse_line(line, file_size, status_codes)
-            if count == 10:
-                print_stats(file_size, status_codes)
-                count = 0
-    except KeyboardInterrupt:
+            line = line.strip()
+            match = regex.fullmatch(line)
+            if match:
+                count += 1
+                status = match.group(1)
+                size = int(match.group(2))
+                file_size += size
+                if status.isDecimal():
+                    status_codes[status] += 1
+                
+                if count % 10 == 0:
+                    print_stats(file_size, status_codes)
+    finally:
         print_stats(file_size, status_codes)
-        raise
-    print_stats(file_size, status_codes)
