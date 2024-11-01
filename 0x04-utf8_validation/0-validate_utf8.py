@@ -6,6 +6,7 @@ def validUTF8(data):
     """ validUTF8 """
     count = 0
     for byte in data:
+        byte = byte & 0xFF
         if count == 0:
             if (byte >> 5) == 0b110:
                 count = 1
