@@ -1,55 +1,57 @@
 #!/usr/bin/python3
-""" N queens problem """
+""" Solution to the NQueens problem """
 import sys
 
 
-def isSafe(board, row, col, n):
-    """ Check if a queen can be placed on board[row][col] """
-    for i in range(col):
-        if board[row][i] == 1:
-            return False
-    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
-        if board[i][j] == 1:
-            return False
-    for i, j in zip(range(row, n, 1), range(col, -1, -1)):
-        if board[i][j] == 1:
-            return False
-    return True
-
-
-def solve(board, col, n):
-    """ Solve N queens problem """
-    if col == n:
+def backtrack(r, n, cols, pos, neg, board):
+    """ backtrack function to find solution """
+    if r == n:
         res = []
-        for i in range(n):
-            for j in range(n):
+        for i in range(len(board)):
+            for j in range(len(board[i])):
                 if board[i][j] == 1:
                     res.append([i, j])
         print(res)
         return
-    for i in range(n):
-        if isSafe(board, i, col, n):
-            board[i][col] = 1
-            solve(board, col + 1, n)
-            board[i][col] = 0
+
+    for c in range(n):
+        if c in cols or (r + c) in pos or (r - c) in neg:
+            continue
+
+        cols.add(c)
+        pos.add(r + c)
+        neg.add(r - c)
+        board[r][c] = 1
+
+        backtrack(r+1, n, cols, pos, neg, board)
+
+        cols.remove(c)
+        pos.remove(r + c)
+        neg.remove(r - c)
+        board[r][c] = 0
 
 
-def solveNQueen(n):
-    """ Solve N queens problem """
-    board = [[0 for j in range(n)] for i in range(n)]
-    solve(board, 0, n)
+def NQueens(n):
+    """ Solution to NQueens problem """
+    cols = set()
+    pos_diag = set()
+    neg_diag = set()
+    board = [[0] * n for i in range(n)]
+
+    backtrack(0, n, cols, pos_diag, neg_diag, board)
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
+    n = sys.argv
+    if len(n) != 2:
         print("Usage: nqueens N")
         sys.exit(1)
-    if not sys.argv[1].isdigit():
+    try:
+        num = int(n[1])
+        if num < 4:
+            print("N must be at least 4")
+            sys.exit(1)
+        NQueens(num)
+    except ValueError:
         print("N must be a number")
         sys.exit(1)
-    n = int(sys.argv[1])
-    if n < 4:
-        print("N must be at least 4")
-        sys.exit(1)
-    solveNQueen(n)
-    sys.exit(0)
