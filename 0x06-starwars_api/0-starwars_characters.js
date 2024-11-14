@@ -1,3 +1,4 @@
+#!/usr/bin/node
 const id = process.argv[2];
 
 const fetchData = async (id) => {
