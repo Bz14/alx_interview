@@ -1,5 +1,6 @@
 #!/usr/bin/node
 const id = process.argv[2];
+const fetch = require('node-fetch');
 
 const fetchData = async (id) => {
   const response = await fetch(`https://swapi.dev/api/films/${id}/`);
