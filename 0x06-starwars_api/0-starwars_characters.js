@@ -1,20 +1,33 @@
 #!/usr/bin/node
+const request = require('request');
 const id = process.argv[2];
 
-const fetchData = async (id) => {
-  const response = await fetch(`https://swapi.dev/api/films/${id}/`);
-  const character = await response.json();
+const fetchData = (id) => {
+  request(`https://swapi.dev/api/films/${id}/`, (err, res, body) => {
+    if (err) {
+      console.error('Error fetching film data:', err);
+      return;
+    }
 
-  for (const key of character.characters) {
-    const actor = await fetchActor(key);
-    console.log(actor.name);
-  }
+    const character = JSON.parse(body);
+    const characters = character.characters;
+
+    characters.forEach((url) => {
+      fetchActor(url);
+    });
+  });
 };
 
-const fetchActor = async (url) => {
-  const response = await fetch(url);
-  const actor = await response.json();
-  return actor;
+const fetchActor = (url) => {
+  request(url, (err, res, body) => {
+    if (err) {
+      console.error('Error fetching actor data:', err);
+      return;
+    }
+
+    const actor = JSON.parse(body);
+    console.log(actor.name);
+  });
 };
 
 fetchData(id);
