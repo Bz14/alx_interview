@@ -25,7 +25,8 @@ def island_perimeter(grid):
             row, col = queue.pop(0)
             for x, y in directions:
                 new_row, new_col = row + x, col + y
-                if (not is_inbound(new_row, new_col) or grid[new_row][new_col] == 0):
+                if (not is_inbound(new_row, new_col)
+                        or grid[new_row][new_col] == 0):
                     perimeter += 1
                 elif ((new_row, new_col) not in visited
                       and grid[new_row][new_col] == 1):
