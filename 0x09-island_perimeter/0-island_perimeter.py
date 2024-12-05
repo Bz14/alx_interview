@@ -1,30 +1,27 @@
-#!/usr/bin/python3
-""" Island perimeter"""
-
-
 def island_perimeter(grid):
-    """island perimeter"""
+    """Calculate the perimeter of the island."""
+    if not grid or not grid[0]:
+        return 0
+
     directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
     visited = set()
+    row_len, col_len = len(grid), len(grid[0])
     ans = 0
-    row_len = len(grid)
-    col_len = len(grid[0])
 
     def is_inbound(row, col):
-        """is inbound"""
-        return (row >= 0 and row < row_len) and (col >= 0 and col < col_len)
+        """Check if the position is within the grid bounds."""
+        return 0 <= row < row_len and 0 <= col < col_len
 
     def DFS(row, col):
-        """DFS"""
+        """Perform DFS to calculate perimeter."""
         nonlocal ans
-        if not is_inbound(row, col) or grid[row][col] == 0:
-            ans += 1
-            return
         visited.add((row, col))
+
         for x, y in directions:
-            new_row = row + x
-            new_col = col + y
-            if (new_row, new_col) not in visited:
+            new_row, new_col = row + x, col + y
+            if not is_inbound(new_row, new_col) or grid[new_row][new_col] == 0:
+                ans += 1
+            elif (new_row, new_col) not in visited:
                 DFS(new_row, new_col)
 
     for i in range(row_len):
@@ -32,3 +29,5 @@ def island_perimeter(grid):
             if grid[i][j] == 1:
                 DFS(i, j)
                 return ans
+
+    return 0
